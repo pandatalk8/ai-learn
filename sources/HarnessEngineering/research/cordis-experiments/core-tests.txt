@@ -1,0 +1,9 @@
+
+ RUN  v4.1.5 /private/tmp/cordis-research/cordis
+
+
+ Test Files  12 passed (12)
+      Tests  87 passed (87)
+   Start at  23:55:10
+   Duration  392ms (transform 850ms, setup 0ms, import 1.18s, tests 179ms, environment 1ms)
+

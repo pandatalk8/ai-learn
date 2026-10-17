@@ -1,0 +1,43 @@
+{
+  "dependency_reactivation": [
+    "start:1",
+    "stop:1",
+    "start:2",
+    "stop:2"
+  ],
+  "top_level_cleanup": [
+    "later cleanup starts",
+    "earlier cleanup",
+    "later cleanup ends"
+  ],
+  "grouped_cleanup": [
+    "later cleanup starts",
+    "later cleanup ends",
+    "earlier cleanup"
+  ],
+  "provider_cleanup_overlap": [
+    "provider resource closed",
+    "consumer cleanup starts",
+    "consumer cleanup ends"
+  ],
+  "isolation": [
+    "left",
+    "right",
+    null
+  ],
+  "events": {
+    "bailZero": 0,
+    "waterfall": "outer(veto)"
+  },
+  "failed_fiber_attempts_after_dependency_returns": 2,
+  "reentrant_setup_cleanup_collected": true,
+  "grouped_provider_cleanup": [
+    "consumer cleanup starts",
+    "consumer cleanup ends",
+    "provider resource closed"
+  ],
+  "service_effect_owned_by_caller": [
+    "register",
+    "unregister"
+  ]
+}

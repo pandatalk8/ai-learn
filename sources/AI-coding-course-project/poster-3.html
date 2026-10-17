@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>海报 3 — 商品宣传</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #1a1a1a;
+      font-family: 'Noto Sans SC', 'Outfit', sans-serif;
+    }
+
+    .poster {
+      width: 540px;
+      height: 720px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background: #09090b;
+    }
+
+    /* Dramatic gradient mesh */
+    .poster::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -20%;
+      width: 160%;
+      height: 160%;
+      background:
+        radial-gradient(ellipse at 30% 10%, rgba(255, 93, 58, 0.2) 0%, transparent 45%),
+        radial-gradient(ellipse at 80% 50%, rgba(255, 140, 66, 0.08) 0%, transparent 40%),
+        radial-gradient(ellipse at 20% 90%, rgba(34, 197, 94, 0.06) 0%, transparent 35%);
+      pointer-events: none;
+    }
+
+    .poster::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 44px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* === Top badge === */
+    .top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      color: #ff5d3a;
+      padding: 5px 14px;
+      border: 1px solid rgba(255, 93, 58, 0.25);
+      border-radius: 100px;
+      background: rgba(255, 93, 58, 0.08);
+      margin-bottom: 28px;
+      align-self: flex-start;
+      letter-spacing: 0.05em;
+    }
+
+    .top-badge .pulse {
+      width: 6px;
+      height: 6px;
+      background: #22c55e;
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    /* === Headline === */
+    .headline {
+      margin-bottom: 32px;
+    }
+
+    .headline h1 {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 40px;
+      font-weight: 900;
+      color: #fafaf9;
+      letter-spacing: -0.03em;
+      line-height: 1.25;
+      margin-bottom: 12px;
+    }
+
+    .headline h1 .glow {
+      background: linear-gradient(135deg, #ff5d3a, #ff8c42);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .headline .sub {
+      font-size: 15px;
+      color: #71717a;
+      line-height: 1.7;
+    }
+
+    /* === What you get === */
+    .benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 14px 16px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid #1e1e22;
+      transition: all 0.3s;
+    }
+
+    .benefit:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: #2a2a30;
+    }
+
+    .benefit-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .benefit:nth-child(1) .benefit-icon { background: rgba(255, 93, 58, 0.12); }
+    .benefit:nth-child(2) .benefit-icon { background: rgba(59, 130, 246, 0.12); }
+    .benefit:nth-child(3) .benefit-icon { background: rgba(34, 197, 94, 0.12); }
+    .benefit:nth-child(4) .benefit-icon { background: rgba(168, 85, 247, 0.12); }
+
+    .benefit-text h4 {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #e4e4e7;
+      margin-bottom: 2px;
+    }
+
+    .benefit-text p {
+      font-size: 12px;
+      color: #71717a;
+      line-height: 1.5;
+    }
+
+    /* === Social proof === */
+    .social-proof {
+      display: flex;
+      gap: 1px;
+      background: #1e1e22;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-bottom: 28px;
+    }
+
+    .proof-item {
+      flex: 1;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      text-align: center;
+    }
+
+    .proof-item .value {
+      font-family: 'Outfit', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #fafaf9;
+      letter-spacing: -0.02em;
+    }
+
+    .proof-item .desc {
+      font-size: 11px;
+      color: #52525b;
+      margin-top: 2px;
+    }
+
+    /* === CTA area === */
+    .cta-area {
+      margin-top: auto;
+      text-align: center;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 16px 32px;
+      background: linear-gradient(135deg, #ff5d3a, #ff8c42);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(255, 93, 58, 0.3);
+      margin-bottom: 12px;
+    }
+
+    .cta-button .arrow {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .cta-sub {
+      font-size: 12px;
+      color: #52525b;
+    }
+
+    .cta-sub strong {
+      color: #71717a;
+    }
+
+    /* === Bottom logo === */
+    .bottom-logo {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #1e1e22;
+    }
+
+    .bottom-logo .dot {
+      width: 6px;
+      height: 6px;
+      background: #ff5d3a;
+      border-radius: 50%;
+    }
+
+    .bottom-logo span {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 12px;
+      color: #52525b;
+    }
+
+    /* Urgency stripe */
+    .urgency-stripe {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff5d3a, #ff8c42);
+      z-index: 3;
+    }
+    /* Export button */
+    .export-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 22px;
+      background: #fff;
+      color: #0c0c0c;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .export-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(0,0,0,0.4); }
+    .export-btn:active { transform: scale(0.97); }
+    .export-btn.loading { opacity: 0.6; pointer-events: none; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <button class="export-btn" onclick="exportPoster(this)">⬇ 导出图片</button>
+  <div class="poster" id="poster">
+    <div class="urgency-stripe"></div>
+
+    <div class="content">
+      <div class="top-badge">
+        <span class="pulse"></span>
+        限额招生中
+      </div>
+
+      <div class="headline">
+        <h1>
+          别再只是「学编程」<br>
+          直接<span class="glow">上线你的产品</span>
+        </h1>
+        <p class="sub">30 天教练带练，从零到真实上线获客</p>
+      </div>
+
+      <div class="benefits">
+        <div class="benefit">
+          <div class="benefit-icon">🏋️</div>
+          <div class="benefit-text">
+            <h4>教练 1v1 带练，不是看视频</h4>
+            <p>线上云开发，遇到问题当场解决，不走弯路</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🚀</div>
+          <div class="benefit-text">
+            <h4>30 天交付一个真实产品</h4>
+            <p>不是 demo 练习，是可部署、可运行、可获客的项目</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">🤖</div>
+          <div class="benefit-text">
+            <h4>用 AI 写 80% 的代码</h4>
+            <p>Cursor + Claude Code，零基础也能构建完整产品</p>
+          </div>
+        </div>
+        <div class="benefit">
+          <div class="benefit-icon">📣</div>
+          <div class="benefit-text">
+            <h4>从开发到获客，全链路覆盖</h4>
+            <p>不只教你做产品，还教你写内容、建 IP、拉用户</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="social-proof">
+        <div class="proof-item">
+          <div class="value">30天</div>
+          <div class="desc">训练周期</div>
+        </div>
+        <div class="proof-item">
+          <div class="value">5模块</div>
+          <div class="desc">全栈能力</div>
+        </div>
+        <div class="proof-item">
+          <div class="value">15章</div>
+          <div class="desc">系统课程</div>
+        </div>
+      </div>
+
+      <div class="cta-area">
+        <div class="cta-button">
+          立即报名，开始构建 <span class="arrow">→</span>
+        </div>
+        <div class="cta-sub">适合 <strong>一人公司</strong> · <strong>副业创业</strong> · <strong>零基础入门</strong></div>
+      </div>
+
+      <div class="bottom-logo">
+        <span class="dot"></span>
+        <span>AI 编程实战课</span>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function exportPoster(btn) {
+      btn.classList.add('loading');
+      btn.textContent = '导出中...';
+      try {
+        const poster = document.getElementById('poster');
+        const canvas = await html2canvas(poster, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+        });
+        const link = document.createElement('a');
+        link.download = 'AI编程实战课-商品宣传.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (e) {
+        alert('导出失败: ' + e.message);
+      }
+      btn.classList.remove('loading');
+      btn.innerHTML = '⬇ 导出图片';
+    }
+  </script>
+</body>
+</html>

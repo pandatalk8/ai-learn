@@ -1,0 +1,250 @@
+{
+  "checked": "2026-10-15",
+  "matches": [
+    {
+      "id": "R03",
+      "repo": "obsidian-kb",
+      "path": "raw/research/2026-10-01-RAG技术系统学习路线图.md",
+      "commit": "a92e8f7141eedc1870c28967f46070a24f03fdd0",
+      "public": false
+    },
+    {
+      "id": "R04",
+      "repo": "obsidian-kb",
+      "path": "sources/clips/2026-01-23-openai-unrolling-the-codex-agent-loop.md",
+      "commit": "a92e8f7141eedc1870c28967f46070a24f03fdd0",
+      "public": false
+    },
+    {
+      "id": "R05",
+      "repo": "obsidian-kb",
+      "path": "raw/notes/2026-10-01-RAG常见面试题.md",
+      "commit": "a92e8f7141eedc1870c28967f46070a24f03fdd0",
+      "public": false
+    },
+    {
+      "id": "R06",
+      "repo": "Articles",
+      "path": "AI技术/AI智能体的有效上下文工程.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true
+    },
+    {
+      "id": "R07",
+      "repo": "obsidian-kb",
+      "path": "wiki/concepts/文件系统作为持久记忆.md",
+      "commit": "a92e8f7141eedc1870c28967f46070a24f03fdd0",
+      "public": false
+    },
+    {
+      "id": "R09",
+      "repo": "Articles",
+      "path": "Articles/AI技术/长时运行应用开发的Harness设计-学习笔记.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true
+    },
+    {
+      "id": "R12",
+      "repo": "Articles",
+      "path": "AI技术/Skill从入门到精通-完整大纲.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true
+    },
+    {
+      "id": "R15",
+      "repo": "obsidian-kb",
+      "path": "wiki/concepts/评估器设计.md",
+      "commit": "a92e8f7141eedc1870c28967f46070a24f03fdd0",
+      "public": false
+    }
+  ],
+  "publicMap": [
+    {
+      "id": "R06",
+      "repo": "Articles",
+      "path": "AI技术/AI智能体的有效上下文工程.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true,
+      "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/AI%E6%8A%80%E6%9C%AF/AI%E6%99%BA%E8%83%BD%E4%BD%93%E7%9A%84%E6%9C%89%E6%95%88%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B.md"
+    },
+    {
+      "id": "R09",
+      "repo": "Articles",
+      "path": "Articles/AI技术/长时运行应用开发的Harness设计-学习笔记.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true,
+      "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/Articles/AI%E6%8A%80%E6%9C%AF/%E9%95%BF%E6%97%B6%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%9A%84Harness%E8%AE%BE%E8%AE%A1-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.md"
+    },
+    {
+      "id": "R12",
+      "repo": "Articles",
+      "path": "AI技术/Skill从入门到精通-完整大纲.md",
+      "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+      "public": true,
+      "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/AI%E6%8A%80%E6%9C%AF/Skill%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A-%E5%AE%8C%E6%95%B4%E5%A4%A7%E7%BA%B2.md"
+    }
+  ],
+  "publicOnlyResolution": {
+    "checked": "2026-10-15",
+    "replacements": [
+      {
+        "id": "R01",
+        "repo": "huggingface/agents-course",
+        "path": "units/zh-CN/unit1/what-are-agents.mdx",
+        "url": "https://github.com/huggingface/agents-course/blob/3c469e773ec04e5f338b727ff20e3a6ea823ff81/units/zh-CN/unit1/what-are-agents.mdx",
+        "commit": "3c469e773ec04e5f338b727ff20e3a6ea823ff81",
+        "sha": "673b4480dc0ea8b10bf6b0d0cdbedf7c7d5611d2",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R02",
+        "repo": "anthropics/claude-quickstarts",
+        "path": "autonomous-coding/prompts/coding_prompt.md",
+        "url": "https://github.com/anthropics/claude-quickstarts/blob/9ec32b91df50b0d4906cae64b13c6298055ff40d/autonomous-coding/prompts/coding_prompt.md",
+        "commit": "9ec32b91df50b0d4906cae64b13c6298055ff40d",
+        "sha": "2af09ad1acb5456866128664a002a38203f4da1d",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R03",
+        "repo": "run-llama/llama_index",
+        "path": "docs/src/content/docs/framework/understanding/rag/index.mdx",
+        "url": "https://github.com/run-llama/llama_index/blob/619d74664e8404612038bc15a1a40c686037277c/docs/src/content/docs/framework/understanding/rag/index.mdx",
+        "commit": "619d74664e8404612038bc15a1a40c686037277c",
+        "sha": "643201ca282dc4297ab697075dce4e25b7890bae",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R04",
+        "repo": "huggingface/agents-course",
+        "path": "units/zh-CN/unit1/agent-steps-and-structure.mdx",
+        "url": "https://github.com/huggingface/agents-course/blob/3c469e773ec04e5f338b727ff20e3a6ea823ff81/units/zh-CN/unit1/agent-steps-and-structure.mdx",
+        "commit": "3c469e773ec04e5f338b727ff20e3a6ea823ff81",
+        "sha": "2f2bf49513830fd5ad0df9bb8b27f88d2817e1f5",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R05",
+        "repo": "run-llama/llama_index",
+        "path": "docs/src/content/docs/framework/module_guides/evaluating/usage_pattern_retrieval.md",
+        "url": "https://github.com/run-llama/llama_index/blob/619d74664e8404612038bc15a1a40c686037277c/docs/src/content/docs/framework/module_guides/evaluating/usage_pattern_retrieval.md",
+        "commit": "619d74664e8404612038bc15a1a40c686037277c",
+        "sha": "0eacff32c84eaefb6749747243992b8864907850",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R07",
+        "repo": "langchain-ai/docs",
+        "path": "src/oss/deepagents/memory.mdx",
+        "url": "https://github.com/langchain-ai/docs/blob/d1f86e4cb91261778387119bf551ab4bd3ecde00/src/oss/deepagents/memory.mdx",
+        "commit": "d1f86e4cb91261778387119bf551ab4bd3ecde00",
+        "sha": "4502a6896ca90007ab8987b38135bbf6598686b8",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R08",
+        "repo": "langchain-ai/docs",
+        "path": "src/oss/deepagents/overview.mdx",
+        "url": "https://github.com/langchain-ai/docs/blob/d1f86e4cb91261778387119bf551ab4bd3ecde00/src/oss/deepagents/overview.mdx",
+        "commit": "d1f86e4cb91261778387119bf551ab4bd3ecde00",
+        "sha": "8231b217c345a31cc618e52cce9293148b4b781c",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R10",
+        "repo": "langchain-ai/docs",
+        "path": "src/oss/langgraph/persistence.mdx",
+        "url": "https://github.com/langchain-ai/docs/blob/d1f86e4cb91261778387119bf551ab4bd3ecde00/src/oss/langgraph/persistence.mdx",
+        "commit": "d1f86e4cb91261778387119bf551ab4bd3ecde00",
+        "sha": "9a725ee58a728913500590459c91eb6368d0a175",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R11",
+        "repo": "langchain-ai/docs",
+        "path": "src/oss/langchain/context-engineering.mdx",
+        "url": "https://github.com/langchain-ai/docs/blob/d1f86e4cb91261778387119bf551ab4bd3ecde00/src/oss/langchain/context-engineering.mdx",
+        "commit": "d1f86e4cb91261778387119bf551ab4bd3ecde00",
+        "sha": "fe08d610b2854c7dc938f7047fcdfd089be1d5ae",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R13",
+        "repo": "anthropics/claude-quickstarts",
+        "path": "autonomous-coding/README.md",
+        "url": "https://github.com/anthropics/claude-quickstarts/blob/9ec32b91df50b0d4906cae64b13c6298055ff40d/autonomous-coding/README.md",
+        "commit": "9ec32b91df50b0d4906cae64b13c6298055ff40d",
+        "sha": "6a3ac47f53dd2a251ff54326168453fc3415f822",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R14",
+        "repo": "jennyzzt/dgm",
+        "path": "README.md",
+        "url": "https://github.com/jennyzzt/dgm/blob/a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2/README.md",
+        "commit": "a565fd2d1dca504ef5104a7cc0f3bdc4ab9b4fd2",
+        "sha": "e4ed9fa7747d265536961a98d3361000b58e396d",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      },
+      {
+        "id": "R15",
+        "repo": "openai/evals",
+        "path": "docs/build-eval.md",
+        "url": "https://github.com/openai/evals/blob/8eac7a7de5215c907fbddc30efdaf316913eccdd/docs/build-eval.md",
+        "commit": "8eac7a7de5215c907fbddc30efdaf316913eccdd",
+        "sha": "7c25dd6bc0d854b3ef2665712129dde6e24da7e3",
+        "public": true,
+        "kind": "public_alternative",
+        "verified_content": true
+      }
+    ],
+    "original_public": [
+      {
+        "id": "R06",
+        "repo": "Articles",
+        "path": "AI技术/AI智能体的有效上下文工程.md",
+        "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+        "public": true,
+        "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/AI%E6%8A%80%E6%9C%AF/AI%E6%99%BA%E8%83%BD%E4%BD%93%E7%9A%84%E6%9C%89%E6%95%88%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B.md"
+      },
+      {
+        "id": "R09",
+        "repo": "Articles",
+        "path": "Articles/AI技术/长时运行应用开发的Harness设计-学习笔记.md",
+        "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+        "public": true,
+        "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/Articles/AI%E6%8A%80%E6%9C%AF/%E9%95%BF%E6%97%B6%E8%BF%90%E8%A1%8C%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91%E7%9A%84Harness%E8%AE%BE%E8%AE%A1-%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0.md"
+      },
+      {
+        "id": "R12",
+        "repo": "Articles",
+        "path": "AI技术/Skill从入门到精通-完整大纲.md",
+        "commit": "09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d",
+        "public": true,
+        "url": "https://github.com/mrbear1024/Articles/blob/09ec7a87b7ccf3cc9ffc25d56cbb5e52cf49bf5d/AI%E6%8A%80%E6%9C%AF/Skill%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A-%E5%AE%8C%E6%95%B4%E5%A4%A7%E7%BA%B2.md"
+      }
+    ]
+  }
+}

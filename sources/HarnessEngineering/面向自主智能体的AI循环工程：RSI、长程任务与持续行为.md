@@ -1,0 +1,281 @@
+---
+title: 面向自主智能体的AI循环工程：RSI、长程任务与持续行为
+date: 2026-10-08
+type: research
+review: unreviewed
+verification: sources_checked_2026-10-08
+tags:
+  - AI
+  - AI循环工程
+  - 递归自我改进
+  - RSI
+
+---
+
+# 关于《自主智能体的AI循环工程、RSI、长程任务与持续行为》值得研究的材料
+
+## 为什么要研究和实践这些问题
+
+AI 循环工程、递归自我改进（RSI）、长程任务和持续行为，值得研究和实践，并不只是因为它们可能通向更强的 AI，也不是为了追逐“智能爆炸”的叙事。
+
+它们首先关系到一个智能体能否真正做到自主可控，以及人类能否高效地参与、审核和协作。一个只会对单轮输入生成答案的模型，往往会产生大量中间噪声，难以维持长期目标，也很难让人准确判断它在做什么、为什么这样做、下一步是否值得继续。
+
+研究这些方向，是为了逐步建立这样的系统能力：
+
+- 把复杂目标拆解为可观察、可暂停、可恢复的长程任务；
+- 让智能体通过执行、评估和反馈持续改善，而不是每次从零开始；
+- 让持续行为受到明确的权限、预算、工具和停止条件约束；
+- 减少无效输出，把人类注意力集中到目标选择、关键判断和例外处理上；
+- 提高人审核与参与的效率，让人类保留对方向、风险和最终决策的控制权。
+
+因此，这些研究方向的共同目标可以表述为：
+
+> 构建能够长期工作、持续改进、低噪声沟通，并且始终处于人类可理解、可干预、可追责边界内的智能体。
+
+## 核心判断
+
+这里的“AI循环工程”指：AI参与研究、编码、实验、评估，并把评估结果反馈给下一轮系统改进的闭环。典型流程是：
+
+> 目标或假设 → 生成方案 → 执行实验 → 自动评估 → 保留改进 → 进入下一轮
+
+目前最真实、最值得研究的 RSI（Recursive Self-Improvement，递归自我改进）并不是模型完全重写自己，而是“AI 加速 AI 研发”的工程闭环。关键瓶颈通常是评估器、实验环境、长期记忆、泛化验证和安全边界。
+
+## 厂商一手工程材料
+
+论文适合建立概念和比较方法，但研究真实的循环工程、长程任务和持续行为，还必须阅读模型厂商如何描述自己的 Agent harness、上下文管理、评估和安全实践。以下材料按工程可复用性优先排列。
+
+### OpenAI
+
+1. [Unrolling the Codex agent loop](https://openai.com/index/unrolling-the-codex-agent-loop/)
+
+   直接拆解 Agent loop：模型推理、工具调用、会话轮次、上下文窗口和状态管理。适合建立“一个 Agent 如何持续工作”的基础模型。
+
+2. [From model to agent: Equipping the Responses API with a computer environment](https://openai.com/index/equip-responses-api-computer-environment/)
+
+   重点是长程任务中的工具环境、Agent 编排和 context compaction，适合研究上下文即将耗尽时如何保留高价值状态并继续工作。
+
+3. [Harness engineering: leveraging Codex in an agent-first world](https://openai.com/index/harness-engineering/)
+
+   这是研究循环工程最值得读的厂商文章之一。它把工程师的工作重新定义为：设计环境、明确意图、建立反馈回路、提供可观测性，并让 Agent 通过测试、审查和迭代完成任务。
+
+4. [Safety and alignment in an era of long-horizon models](https://openai.com/index/safety-alignment-long-horizon-models/)
+
+   研究持续行为的边界条件。它强调长时间运行会增加模型采取非预期行动的机会，因此安全评估必须从单次动作扩展到完整 trajectory，并提供暂停、监控和用户控制。
+
+5. [Scientific computing in the age of agentic AI](https://openai.com/index/scientific-computing-agentic-ai/)
+
+   这篇材料将循环工程放到真实科学软件中考察：Agent 负责实现和维护，人类负责科学有效性判断；可靠做法是拆分任务、设置中间 benchmark，并用外部参考或可测量目标验证结果。
+
+### Anthropic
+
+1. [Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
+
+   研究跨多个 context window 持续工作的经典材料。核心方法是 initializer agent、incremental coding agent 和结构化交接产物，适合转化为个人 Agent 或团队工作流。
+
+2. [Harness design for long-running application development](https://www.anthropic.com/engineering/harness-design-long-running-apps)
+
+   进一步提出 planner、generator、evaluator 三 Agent 架构，并讨论 context reset 与 compaction 的区别，以及为什么独立 evaluator 通常比让生成 Agent 自评更可靠。
+
+3. [Enabling Claude Code to work more autonomously](https://www.anthropic.com/news/enabling-claude-code-to-work-more-autonomously)
+
+   重点关注 checkpoint、subagents、hooks 和 background tasks。这些机制对应持续行为中的版本恢复、并行分工、自动触发和后台执行。
+
+4. [Measuring AI agent autonomy in practice](https://www.anthropic.com/news/measuring-agent-autonomy)
+
+   从真实使用数据出发，观察 Agent 在无人干预时运行多久、何时被打断、用户如何逐渐增加授权，以及自治和风险如何共同变化。
+
+5. [Effective context engineering for AI agents](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents)
+
+   适合研究如何降低上下文噪声、保留任务状态和提高人类审核效率，对知识库、长文档和多工具 Agent 尤其有用。
+
+### DeepSeek 与 Kimi：目前应如何阅读
+
+截至 2026-10-08，公开可检索的 DeepSeek 官方材料中，最丰富的仍是模型架构、训练和推理能力，而不是专门讲持续 Agent 行为、长程 harness 或 RSI 工程闭环的技术博客。因此，DeepSeek 材料更适合放在“基础模型能力与推理效率”一栏，不宜直接当作循环工程实践证据。
+
+Kimi 的公开材料更接近 Agent 产品文档，例如 [Kimi Agent Features and Usage Limits](https://www.kimi.com/en/help/agent/agent-features-and-limits)。它能提供上下文长度、异步执行、交付物和使用边界等产品事实，但目前不应与 Anthropic 的 harness 文章或 OpenAI 的工程复盘放在同一证据等级上。后续如果 Kimi 或 DeepSeek 发布更完整的 Agent SDK、长程任务评估或持续行为技术报告，再单独补入本节。
+
+## 厂商材料与论文的分工
+
+| 材料类型         | 最适合回答的问题                                 |
+| ---------------- | ------------------------------------------------ |
+| 厂商工程博客     | 系统实际如何运行，哪些机制能落地                 |
+| 系统卡与安全报告 | 长程行为有哪些失败模式，如何监控和限制           |
+| 论文             | 方法是否可复现，实验是否支持更一般的结论         |
+| 产品文档         | 当前能力、接口、上下文、异步执行和使用边界是什么 |
+| 社区文章与宣传   | 发现线索，但不能单独作为能力证据                 |
+
+建议先读厂商工程博客，理解循环系统的真实结构；再读系统卡和评估报告，确认边界；最后用论文补足理论、实验和可复现性。
+
+## 第一梯队：必须阅读
+
+### 1. Darwin Gödel Machine
+
+[Darwin Gödel Machine: Open-Ended Evolution of Self-Improving Agents](https://arxiv.org/abs/2505.22954)
+
+它让 Agent 修改自己的代码和工作机制，每次修改都在代码任务上验证，并维护多个历史版本。
+
+重点关注：
+
+- self-modifying agent 的基本架构；
+- archive、mutation、evaluation 机制；
+- 为什么保留多个变体比单线迭代更稳健；
+- 它距离真正的智能递归爆炸还有多远。
+
+它主要改进的是 Agent scaffold 和工作流，而不是直接重写基础模型权重，因此更准确地说是受限的系统级自我改进。
+
+### 2. AlphaEvolve
+
+[AlphaEvolve: A Gemini-powered coding agent for designing advanced algorithms](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/)
+
+这是“AI循环工程”最清晰的工业案例之一。AlphaEvolve 通过生成代码、自动运行、测量指标、保留优胜方案，持续搜索更好的算法。
+
+重点关注：
+
+- 代码生成和自动验证如何结合；
+- 为什么明确、可计算的评价指标非常关键；
+- 算法搜索、基础设施优化和模型训练优化之间的关系；
+- AI 如何从写代码变成搜索程序空间。
+
+### 3. The AI Scientist
+
+[The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery](https://arxiv.org/abs/2408.06292)
+
+它把科学研究拆成：
+
+> 生成想法 → 写代码 → 跑实验 → 画图 → 写论文 → 模拟同行评审
+
+重点关注：
+
+- 如何把开放式研究问题转化为可执行实验；
+- 自动实验和自动评审之间的关系；
+- “能生成论文”与“真正发现新知识”的差别；
+- 领域限制、实验可靠性和新颖性判断问题。
+
+可以继续阅读 [The AI Scientist-v2](https://pub.sakana.ai/ai-scientist-v2/paper/paper.pdf)，观察研究生产流水线如何演化。
+
+### 4. Anthropic：When AI builds itself
+
+[When AI builds itself](https://www.anthropic.com/institute/recursive-self-improvement)
+
+这篇材料区分了：
+
+- AI 辅助人类改进模型；
+- AI 独立完成部分研发任务；
+- AI 选择研究方向；
+- AI 设计并训练下一代模型；
+- 完全自主的递归自我改进。
+
+它的价值在于说明：当前系统已经能够参与模型研发闭环，但在目标选择、研究判断和跨任务泛化上仍有明显的人类依赖。
+
+## 第二梯队：理解循环如何可靠运行
+
+### 5. METR：AI 研究与开发能力评估
+
+[Evaluating Frontier ML Research Capabilities of Language Model Agents](https://metr.org/AI_R_D_Evaluation_Report.pdf)
+
+METR 不讨论系统“看起来像不像研究员”，而是测量 Agent 在真实机器学习研发任务中的完成能力。
+
+重点关注：
+
+- 如何把 AI 研究任务拆成可测量任务；
+- 如何比较 Agent 与人类专家；
+- 任务时长、成功率、资源条件和人工干预；
+- 为什么完成一个小任务不等于自动化整个研发岗位。
+
+### 6. Agent 工作流评估
+
+[Evaluate agent workflows — OpenAI](https://developers.openai.com/api/docs/guides/agent-evals)
+
+这篇偏工程，但对构建循环系统非常重要。核心组件包括：
+
+- traces；
+- graders；
+- datasets；
+- eval runs；
+- 版本对比；
+- 回归测试。
+
+没有独立评估器的“自我改进系统”，很容易变成自我确认循环：模型提出改进，再由模型自己判断改进成功，最终只是越来越擅长满足自己的评分标准。
+
+### 7. SWE-bench Verified 及其反思
+
+[Introducing SWE-bench Verified](https://openai.com/index/introducing-swe-bench-verified/)
+
+它提供了典型的代码 Agent 闭环：
+
+> 真实 GitHub issue → Agent 修改代码 → 测试验证 → 判断是否解决问题
+
+同时应阅读 [Why SWE-bench Verified no longer measures frontier coding capabilities](https://openai.com/index/why-we-no-longer-evaluate-swe-bench-verified/)，因为当模型能力提升后，原本有效的 benchmark 可能被污染、饱和或失真。评估器本身也必须持续改进。
+
+## 第三梯队：理论与长期 RSI
+
+### 8. The Path to Recursive Self-Improving Agents
+
+[The Path to Recursive Self-Improving Agents](https://self-improving-agent.com/)
+
+这份综述适合建立术语体系。它把 Agent 拆成几个可改进部分：
+
+- foundation model；
+- harness / scaffold；
+- data system；
+- trainer；
+- improvement mechanism。
+
+“AI 自我改进”不是单一能力，而是多个层次：输出、Prompt、工作流、记忆、scaffold、训练、研究方向和系统架构。
+
+### 9. Self-Improvements in Modern Agentic Systems
+
+[Self-Improvements in Modern Agentic Systems: A Survey](https://arxiv.org/abs/2607.13104)
+
+它系统讨论现代 Agent 的持续改进，适合回答：
+
+- 什么才算 persistent improvement；
+- Prompt、memory、tools、workflow、weights 的改进有什么区别；
+- 如何判断一次改进是否可迁移；
+- 如何避免能力退化和数据污染。
+
+### 10. Gödel Machine
+
+[Gödel Machine — Jürgen Schmidhuber](https://www.idsia.ch/~juergen/goedelmachine.html)
+
+Gödel Machine 的核心思想是：系统只有在能够形式化证明某种自我修改会带来更高效用时，才修改自身。
+
+它与今天的 LLM Agent 有很大差距，但适合思考：
+
+- 自我修改需要什么证明或证据；
+- “改进”究竟由谁定义；
+- 理论上的最优自我改进为何难以落地；
+- 经验评估和形式化证明之间的差异。
+
+### 11. Bounded Recursive Self-Improvement
+
+[Bounded Recursive Self-Improvement](https://futureoflife.org/wp-content/uploads/2017/01/Bas-Steunebrink.pdf)
+
+这篇适合避免把 RSI 直接等同于“智能爆炸”。它讨论受限、渐进式、局部的递归自我改进，比流行媒体中的“AI 自己变超级智能”更加严谨。
+
+## 推荐学习顺序
+
+如果只读六篇：
+
+1. AlphaEvolve
+2. Darwin Gödel Machine
+3. The AI Scientist
+4. METR AI R&D Evaluation Report
+5. Anthropic：When AI builds itself
+6. The Path to Recursive Self-Improving Agents
+
+建议按照以下顺序阅读：
+
+> 工程闭环 → Agent 自修改 → 自动科学研究 → 能力评估 → 产业真实进展 → 理论综述
+
+## 阅读时反复追问的五个问题
+
+1. 改进对象是什么：模型权重、Prompt、工具、记忆、代码，还是研究流程？
+2. 评价器是谁：人类、测试集、形式化验证器、另一个模型，还是现实世界结果？
+3. 改进是否能迁移：在训练任务上变好，是否也能在新任务、新领域中变好？
+4. 系统是否真的提高了“改进能力”：还是只提高了某个固定 benchmark 的分数？
+5. 人类还控制什么：目标设定、实验选择、资源分配、风险判断，还是只负责最后签字？
+
+## 研究状态说明
+
+本文是基于公开网页、论文和官方技术材料整理的未人工复核研究索引。链接与文献状态截至 2026-10-08 检查；其中部分内容属于研究团队的系统描述或研究主张，不应直接视为已证实的通用 RSI 能力。

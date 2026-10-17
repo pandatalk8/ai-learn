@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 编程实战课 — 一个月，从零到上线</title>
+  <meta name="description" content="用 AI 写代码，构建你的真实产品。教练制实操训练，面向一人公司与副业人群。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-primary: #09090b;
+      --bg-card: #131316;
+      --bg-card-hover: #1a1a1f;
+      --border: #27272a;
+      --border-light: #3f3f46;
+      --text-primary: #fafaf9;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      --accent: #ff5d3a;
+      --accent-light: #ff8c42;
+      --accent-glow: rgba(255, 93, 58, 0.15);
+      --accent-gradient: linear-gradient(135deg, #ff5d3a, #ff8c42);
+      --green: #22c55e;
+      --blue: #3b82f6;
+      --purple: #a855f7;
+      --cyan: #06b6d4;
+      --yellow: #eab308;
+      --font-display: 'Outfit', 'Noto Sans SC', sans-serif;
+      --font-body: 'Noto Sans SC', 'Outfit', sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    /* Noise texture overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ===== NAVIGATION ===== */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      backdrop-filter: blur(20px);
+      background: rgba(9, 9, 11, 0.8);
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.3s;
+    }
+
+    nav.scrolled {
+      border-bottom-color: var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-weight: 800;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-logo .dot {
+      width: 8px;
+      height: 8px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    .nav-cta {
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.6rem 1.5rem;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      text-decoration: none;
+    }
+
+    .nav-cta:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 30px rgba(255, 93, 58, 0.3);
+    }
+
+    /* ===== LAYOUT ===== */
+    section {
+      position: relative;
+      z-index: 1;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1rem;
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-desc {
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+      max-width: 600px;
+      line-height: 1.8;
+    }
+
+    /* ===== HERO ===== */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 8rem 0 6rem;
+      position: relative;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 93, 58, 0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-content {
+      position: relative;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+      padding: 0.4rem 1rem;
+      border: 1px solid rgba(255, 93, 58, 0.3);
+      border-radius: 100px;
+      margin-bottom: 2rem;
+      background: var(--accent-glow);
+    }
+
+    .hero-badge::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 1.5s ease-in-out infinite;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero h1 .highlight {
+      background: var(--accent-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-sub {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      max-width: 520px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 600;
+      padding: 0.9rem 2.25rem;
+      background: var(--accent-gradient);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(255, 93, 58, 0.35);
+    }
+
+    .btn-secondary {
+      font-family: var(--font-display);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 0.9rem 2.25rem;
+      background: transparent;
+      color: var(--text-primary);
+      border: 1px solid var(--border-light);
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.25s;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 3rem;
+      margin-top: 4rem;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .hero-stat .number {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-stat .label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* ===== FORMAT SECTION ===== */
+    .format {
+      padding: 7rem 0;
+    }
+
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 3rem;
+    }
+
+    .format-card {
+      background: var(--bg-card);
+      padding: 2.25rem;
+      transition: background 0.3s;
+    }
+
+    .format-card:hover {
+      background: var(--bg-card-hover);
+    }
+
+    .format-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .format-card:nth-child(1) .format-icon { background: rgba(255, 93, 58, 0.12); color: var(--accent); }
+    .format-card:nth-child(2) .format-icon { background: rgba(34, 197, 94, 0.12); color: var(--green); }
+    .format-card:nth-child(3) .format-icon { background: rgba(59, 130, 246, 0.12); color: var(--blue); }
+    .format-card:nth-child(4) .format-icon { background: rgba(168, 85, 247, 0.12); color: var(--purple); }
+
+    .format-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+
+    .format-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ===== TIMELINE ===== */
+    .timeline {
+      padding: 7rem 0;
+    }
+
+    .timeline-track {
+      margin-top: 3rem;
+      position: relative;
+    }
+
+    .timeline-line {
+      position: absolute;
+      left: 28px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-line-fill {
+      position: absolute;
+      left: 28px;
+      top: 0;
+      width: 2px;
+      height: 0;
+      background: var(--accent-gradient);
+      transition: height 1.5s ease;
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-left: 76px;
+      padding-bottom: 3rem;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.6s ease;
+    }
+
+    .timeline-item.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 18px;
+      top: 4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--bg-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color 0.3s, background 0.3s;
+      z-index: 2;
+    }
+
+    .timeline-item.visible .timeline-dot {
+      border-color: var(--accent);
+    }
+
+    .timeline-dot-inner {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: transparent;
+      transition: background 0.3s;
+    }
+
+    .timeline-item.visible .timeline-dot-inner {
+      background: var(--accent);
+    }
+
+    .timeline-week {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-item h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-item p {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .timeline-tag {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+      margin-top: 0.75rem;
+      background: rgba(34, 197, 94, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(34, 197, 94, 0.2);
+    }
+
+    /* ===== MODULES ===== */
+    .modules {
+      padding: 7rem 0;
+    }
+
+    .modules-grid {
+      margin-top: 3rem;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .module-card {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      align-items: start;
+      gap: 1.5rem;
+      padding: 2rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: all 0.3s;
+      cursor: default;
+    }
+
+    .module-card:hover {
+      border-color: var(--border-light);
+      background: var(--bg-card-hover);
+      transform: translateX(4px);
+    }
+
+    .module-number {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 900;
+      line-height: 1;
+      opacity: 0.12;
+      min-width: 56px;
+    }
+
+    .module-body h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.25rem;
+    }
+
+    .module-body h3 span {
+      color: var(--text-muted);
+      font-weight: 400;
+      margin-left: 0.25rem;
+    }
+
+    .module-body p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .module-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .module-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      padding: 0.2rem 0.55rem;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
+
+    .module-chapters {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .module-card:nth-child(1) { --module-accent: var(--accent); }
+    .module-card:nth-child(2) { --module-accent: var(--blue); }
+    .module-card:nth-child(3) { --module-accent: var(--cyan); }
+    .module-card:nth-child(4) { --module-accent: var(--yellow); }
+    .module-card:nth-child(5) { --module-accent: var(--purple); }
+
+    .module-card:hover .module-number {
+      opacity: 0.25;
+      color: var(--module-accent);
+    }
+
+    /* ===== AUDIENCE ===== */
+    .audience {
+      padding: 7rem 0;
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+      margin-top: 3rem;
+    }
+
+    .audience-card {
+      padding: 2.25rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      transition: all 0.3s;
+    }
+
+    .audience-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 40px var(--accent-glow);
+    }
+
+    .audience-card .icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .audience-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .audience-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.7;
+    }
+
+    /* ===== TOOLS ===== */
+    .tools {
+      padding: 5rem 0;
+    }
+
+    .tools-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+      justify-content: center;
+    }
+
+    .tool-chip {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      font-weight: 500;
+      padding: 0.5rem 1.1rem;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      background: var(--bg-card);
+      transition: all 0.3s;
+    }
+
+    .tool-chip:hover {
+      border-color: var(--border-light);
+      color: var(--text-primary);
+      background: var(--bg-card-hover);
+    }
+
+    /* ===== CTA ===== */
+    .cta {
+      padding: 8rem 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .cta::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255, 93, 58, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.25rem, 5vw, 3.5rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.15;
+      margin-bottom: 1.25rem;
+    }
+
+    .cta p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+      margin-bottom: 2.5rem;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .cta .btn-primary {
+      font-size: 1.1rem;
+      padding: 1rem 2.75rem;
+    }
+
+    /* ===== FOOTER ===== */
+    footer {
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .fade-in-delay-1 { transition-delay: 0.1s; }
+    .fade-in-delay-2 { transition-delay: 0.2s; }
+    .fade-in-delay-3 { transition-delay: 0.3s; }
+    .fade-in-delay-4 { transition-delay: 0.4s; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 900px) {
+      .format-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .audience-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        gap: 2rem;
+      }
+
+      .module-card {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .module-number {
+        font-size: 1.5rem;
+      }
+
+      .module-chapters {
+        align-self: start;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 1.25rem;
+      }
+
+      nav {
+        padding: 1rem 1.25rem;
+      }
+
+      .format-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-stats {
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-primary, .btn-secondary {
+        text-align: center;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav id="nav">
+    <div class="nav-logo">
+      <span class="dot"></span> AI 编程实战课
+    </div>
+    <a href="#cta" class="nav-cta">立即报名</a>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-badge">正在招生</div>
+        <h1>
+          用 AI 写代码<br>
+          <span class="highlight">构建你的产品</span>
+        </h1>
+        <p class="hero-sub">
+          教练带练，动手为主。一个月内从零开发一个真实上线、可运行、可获客的项目。专为一人公司与副业人群设计。
+        </p>
+        <div class="hero-actions">
+          <a href="#cta" class="btn-primary">开始报名 →</a>
+          <a href="#format" class="btn-secondary">了解课程</a>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat">
+            <div class="number">30天</div>
+            <div class="label">训练周期</div>
+          </div>
+          <div class="hero-stat">
+            <div class="number">100%</div>
+            <div class="label">实操驱动</div>
+          </div>
+          <div class="hero-stat">
+            <div class="number">1个</div>
+            <div class="label">真实上线项目</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Format -->
+  <section class="format" id="format">
+    <div class="container">
+      <div class="section-label fade-in">// 课程形式</div>
+      <h2 class="section-title fade-in">不是网课，是训练</h2>
+      <p class="section-desc fade-in">没有冗长的录播视频。你会和教练一起线上云开发，在真实项目中学会每一个技能。</p>
+      <div class="format-grid">
+        <div class="format-card fade-in fade-in-delay-1">
+          <div class="format-icon">⌨️</div>
+          <h3>动手为主</h3>
+          <p>大量时间花在实际编码上，边做边学，每次练习都产出真实代码。</p>
+        </div>
+        <div class="format-card fade-in fade-in-delay-2">
+          <div class="format-icon">🏋️</div>
+          <h3>教练模式</h3>
+          <p>我是你的教练，带你线上云开发。不是单向授课，而是并肩实战。</p>
+        </div>
+        <div class="format-card fade-in fade-in-delay-3">
+          <div class="format-icon">📖</div>
+          <h3>理论阅读</h3>
+          <p>知识性内容以阅读材料形式提供，课前预习，不占宝贵的实操时间。</p>
+        </div>
+        <div class="format-card fade-in fade-in-delay-4">
+          <div class="format-icon">🚀</div>
+          <h3>项目驱动</h3>
+          <p>所有学习围绕你的真实项目展开，学到即用到，拒绝 demo 练习。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Timeline -->
+  <section class="timeline" id="timeline">
+    <div class="container">
+      <div class="section-label fade-in">// 训练节奏</div>
+      <h2 class="section-title fade-in">四周，从零到上线</h2>
+      <p class="section-desc fade-in">每一周都有明确的交付目标。不是学完再做，而是边做边学。</p>
+      <div class="timeline-track">
+        <div class="timeline-line"></div>
+        <div class="timeline-line-fill" id="timeline-fill"></div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+          <div class="timeline-week">WEEK 01</div>
+          <h3>环境与基础</h3>
+          <p>搭建完整工具链 — Cursor、Claude Code、Git、终端。完成项目脚手架，跑通第一个页面。</p>
+          <span class="timeline-tag">✓ 交付：项目脚手架搭建完成</span>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+          <div class="timeline-week">WEEK 02</div>
+          <h3>核心开发</h3>
+          <p>前后端主要功能开发。用 Next.js 搭建页面，用 Supabase 对接数据库，实现核心业务逻辑。</p>
+          <span class="timeline-tag">✓ 交付：MVP 本地可运行</span>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+          <div class="timeline-week">WEEK 03</div>
+          <h3>功能完善</h3>
+          <p>集成支付、用户认证等业务模块。打磨交互体验，补全边界场景，产品功能完整可用。</p>
+          <span class="timeline-tag">✓ 交付：产品功能完整</span>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-dot"><div class="timeline-dot-inner"></div></div>
+          <div class="timeline-week">WEEK 04</div>
+          <h3>上线获客</h3>
+          <p>部署到 Vercel / Cloudflare，绑定域名上线。制作落地页，启动内容引流，拿到第一批真实用户。</p>
+          <span class="timeline-tag">✓ 交付：产品上线 + 第一批用户</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Modules -->
+  <section class="modules" id="modules">
+    <div class="container">
+      <div class="section-label fade-in">// 课程内容</div>
+      <h2 class="section-title fade-in">五大模块，全链路覆盖</h2>
+      <p class="section-desc fade-in">从构建产品到内容获客，掌握一人公司需要的完整能力栈。</p>
+
+      <div class="modules-grid">
+        <div class="module-card fade-in">
+          <div class="module-number">01</div>
+          <div class="module-body">
+            <h3>Building <span>— 从零构建产品</span></h3>
+            <p>工具栈搭建、架构设计、前后端编码、部署上线，完整的产品开发全流程。</p>
+            <div class="module-tags">
+              <span class="module-tag">Cursor</span>
+              <span class="module-tag">Claude Code</span>
+              <span class="module-tag">Next.js</span>
+              <span class="module-tag">Supabase</span>
+              <span class="module-tag">Vercel</span>
+            </div>
+          </div>
+          <div class="module-chapters">5 章</div>
+        </div>
+
+        <div class="module-card fade-in">
+          <div class="module-number">02</div>
+          <div class="module-body">
+            <h3>Engineering <span>— AI 工程能力</span></h3>
+            <p>Prompt Engineering、Context Engineering、LLM 原理与 Harness 工程化配置。</p>
+            <div class="module-tags">
+              <span class="module-tag">Prompt</span>
+              <span class="module-tag">Context</span>
+              <span class="module-tag">LLM</span>
+              <span class="module-tag">MCP</span>
+              <span class="module-tag">Agent</span>
+            </div>
+          </div>
+          <div class="module-chapters">4 章</div>
+        </div>
+
+        <div class="module-card fade-in">
+          <div class="module-number">03</div>
+          <div class="module-body">
+            <h3>Research <span>— 用 AI 做研究</span></h3>
+            <p>技术调研、数据收集与处理、竞品分析，用 AI 高效完成前期调研工作。</p>
+            <div class="module-tags">
+              <span class="module-tag">调研</span>
+              <span class="module-tag">数据收集</span>
+              <span class="module-tag">竞品分析</span>
+            </div>
+          </div>
+          <div class="module-chapters">2 章</div>
+        </div>
+
+        <div class="module-card fade-in">
+          <div class="module-number">04</div>
+          <div class="module-body">
+            <h3>Learning <span>— AI 加速学习</span></h3>
+            <p>用 AI 生成个性化学习计划与定制课程，快速掌握新技术栈。</p>
+            <div class="module-tags">
+              <span class="module-tag">学习计划</span>
+              <span class="module-tag">定制课程</span>
+              <span class="module-tag">费曼学习法</span>
+            </div>
+          </div>
+          <div class="module-chapters">1 章</div>
+        </div>
+
+        <div class="module-card fade-in">
+          <div class="module-number">05</div>
+          <div class="module-body">
+            <h3>Writing <span>— 内容创作与获客</span></h3>
+            <p>AI 写作、社交媒体运营、个人 IP 打造，让产品被人看到。</p>
+            <div class="module-tags">
+              <span class="module-tag">技术写作</span>
+              <span class="module-tag">社交媒体</span>
+              <span class="module-tag">个人IP</span>
+            </div>
+          </div>
+          <div class="module-chapters">3 章</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Audience -->
+  <section class="audience" id="audience">
+    <div class="container">
+      <div class="section-label fade-in">// 适合谁</div>
+      <h2 class="section-title fade-in">为行动者设计</h2>
+      <div class="audience-grid">
+        <div class="audience-card fade-in fade-in-delay-1">
+          <div class="icon">🧑‍💻</div>
+          <h3>一人公司创业者</h3>
+          <p>你有产品想法，想用 AI 快速实现，不依赖外包和团队，自己掌控技术。</p>
+        </div>
+        <div class="audience-card fade-in fade-in-delay-2">
+          <div class="icon">💼</div>
+          <h3>在职副业人士</h3>
+          <p>白天上班，晚上造产品。用有限的业余时间，做出真正能跑的副业项目。</p>
+        </div>
+        <div class="audience-card fade-in fade-in-delay-3">
+          <div class="icon">🔥</div>
+          <h3>愿意动手的人</h3>
+          <p>不要求编程基础，但你需要愿意打开终端、写下第一行代码。行动力是唯一门槛。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- Tools -->
+  <section class="tools">
+    <div class="container" style="text-align: center;">
+      <div class="section-label fade-in">// 技术栈</div>
+      <h2 class="section-title fade-in" style="margin-left:auto;margin-right:auto;">你将用到的工具</h2>
+      <div class="tools-row fade-in">
+        <span class="tool-chip">Cursor</span>
+        <span class="tool-chip">Claude Code</span>
+        <span class="tool-chip">Next.js</span>
+        <span class="tool-chip">React</span>
+        <span class="tool-chip">Tailwind CSS</span>
+        <span class="tool-chip">TypeScript</span>
+        <span class="tool-chip">Supabase</span>
+        <span class="tool-chip">Git & GitHub</span>
+        <span class="tool-chip">Vercel</span>
+        <span class="tool-chip">Cloudflare</span>
+        <span class="tool-chip">Python</span>
+        <span class="tool-chip">FastAPI</span>
+        <span class="tool-chip">Linux</span>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- CTA -->
+  <section class="cta" id="cta">
+    <div class="container">
+      <h2 class="fade-in">别再只是「学编程」<br>直接<span style="background:var(--accent-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">上线你的产品</span></h2>
+      <p class="fade-in">一个月后，你会拥有一个真实运行的项目，而不是一堆未完成的教程。</p>
+      <a href="#" class="btn-primary fade-in" style="font-size:1.1rem;padding:1rem 2.75rem;">立即报名 →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>AI 编程实战课 · 用 AI 构建真实产品</p>
+    </div>
+  </footer>
+
+  <script>
+    // Scroll-triggered animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, {
+      threshold: 0.15,
+      rootMargin: '0px 0px -40px 0px'
+    });
+
+    document.querySelectorAll('.fade-in, .timeline-item').forEach(el => {
+      observer.observe(el);
+    });
+
+    // Nav scroll effect
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 50);
+    });
+
+    // Timeline fill animation
+    const timelineSection = document.getElementById('timeline');
+    const timelineFill = document.getElementById('timeline-fill');
+
+    const timelineObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          setTimeout(() => {
+            timelineFill.style.height = '100%';
+          }, 400);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    timelineObserver.observe(timelineSection);
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>

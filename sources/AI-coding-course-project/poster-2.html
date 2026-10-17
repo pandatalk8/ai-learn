@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>海报 2 — 课程内容目录</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800;900&family=Noto+Sans+SC:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: #1a1a1a;
+      font-family: 'Noto Sans SC', 'Outfit', sans-serif;
+    }
+
+    .poster {
+      width: 540px;
+      height: 720px;
+      background: #fafaf7;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Paper texture */
+    .poster::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.02'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      padding: 40px 40px 32px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* === Header === */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 28px;
+    }
+
+    .header-left .label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #ff5d3a;
+      margin-bottom: 10px;
+    }
+
+    .header-left h1 {
+      font-family: 'Noto Sans SC', sans-serif;
+      font-size: 30px;
+      font-weight: 900;
+      color: #0c0c0c;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+    }
+
+    .header-right {
+      text-align: right;
+      padding-top: 4px;
+    }
+
+    .total-badge {
+      font-family: 'Outfit', sans-serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: #0c0c0c;
+      letter-spacing: -0.03em;
+    }
+
+    .total-label {
+      font-size: 11px;
+      color: #a1a1aa;
+      margin-top: -2px;
+    }
+
+    /* === Modules list === */
+    .modules {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .module {
+      border: 1px solid #e8e8ec;
+      border-radius: 12px;
+      background: white;
+      overflow: hidden;
+      transition: all 0.3s;
+    }
+
+    .module:hover {
+      border-color: #d4d4d8;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+
+    .module-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+    }
+
+    .module-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .m1 .module-icon { background: #fff1f0; }
+    .m2 .module-icon { background: #eef2ff; }
+    .m3 .module-icon { background: #ecfdf5; }
+    .m4 .module-icon { background: #fffbeb; }
+    .m5 .module-icon { background: #fdf2f8; }
+
+    .module-title {
+      flex: 1;
+    }
+
+    .module-title h3 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #0c0c0c;
+      letter-spacing: -0.01em;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .module-title h3 .en {
+      font-weight: 400;
+      color: #a1a1aa;
+      font-size: 12px;
+    }
+
+    .chapter-count {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 100px;
+      flex-shrink: 0;
+    }
+
+    .m1 .chapter-count { background: #fff1f0; color: #dc2626; }
+    .m2 .chapter-count { background: #eef2ff; color: #4f46e5; }
+    .m3 .chapter-count { background: #ecfdf5; color: #059669; }
+    .m4 .chapter-count { background: #fffbeb; color: #d97706; }
+    .m5 .chapter-count { background: #fdf2f8; color: #db2777; }
+
+    .module-chapters {
+      padding: 0 16px 14px 66px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+
+    .chapter-tag {
+      font-size: 11px;
+      color: #71717a;
+      padding: 3px 10px;
+      border-radius: 6px;
+      background: #f4f4f5;
+      white-space: nowrap;
+    }
+
+    /* === Left accent bar on module === */
+    .module {
+      border-left: 3px solid transparent;
+    }
+
+    .m1 { border-left-color: #ff5d3a; }
+    .m2 { border-left-color: #6366f1; }
+    .m3 { border-left-color: #10b981; }
+    .m4 { border-left-color: #f59e0b; }
+    .m5 { border-left-color: #ec4899; }
+
+    /* === Bottom === */
+    .bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid #e8e8ec;
+    }
+
+    .logo-dark {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: 13px;
+      color: #0c0c0c;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .logo-dark .dot {
+      width: 6px;
+      height: 6px;
+      background: #ff5d3a;
+      border-radius: 50%;
+    }
+
+    .bottom-desc {
+      font-size: 11px;
+      color: #a1a1aa;
+    }
+
+    /* Top accent stripe */
+    .accent-stripe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #ff5d3a, #6366f1, #10b981, #f59e0b, #ec4899);
+      z-index: 3;
+    }
+    /* Export button */
+    .export-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 999;
+      font-family: 'Outfit', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 22px;
+      background: #0c0c0c;
+      color: #fff;
+      border: none;
+      border-radius: 100px;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .export-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 28px rgba(0,0,0,0.2); }
+    .export-btn:active { transform: scale(0.97); }
+    .export-btn.loading { opacity: 0.6; pointer-events: none; }
+  </style>
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+</head>
+<body>
+  <button class="export-btn" onclick="exportPoster(this)">⬇ 导出图片</button>
+  <div class="poster" id="poster">
+    <div class="accent-stripe"></div>
+
+    <div class="content">
+      <div class="header">
+        <div class="header-left">
+          <div class="label">// Course Modules</div>
+          <h1>课程内容目录</h1>
+        </div>
+        <div class="header-right">
+          <div class="total-badge">15</div>
+          <div class="total-label">章节</div>
+        </div>
+      </div>
+
+      <div class="modules">
+        <!-- Module 1: Building -->
+        <div class="module m1">
+          <div class="module-header">
+            <div class="module-icon">🔨</div>
+            <div class="module-title">
+              <h3>从零构建产品 <span class="en">Building</span></h3>
+            </div>
+            <div class="chapter-count">5 章</div>
+          </div>
+          <div class="module-chapters">
+            <span class="chapter-tag">工具栈搭建</span>
+            <span class="chapter-tag">架构设计</span>
+            <span class="chapter-tag">前端编码</span>
+            <span class="chapter-tag">后端编码</span>
+            <span class="chapter-tag">部署与维护</span>
+          </div>
+        </div>
+
+        <!-- Module 2: Engineering -->
+        <div class="module m2">
+          <div class="module-header">
+            <div class="module-icon">⚙️</div>
+            <div class="module-title">
+              <h3>AI 工程能力 <span class="en">Engineering</span></h3>
+            </div>
+            <div class="chapter-count">4 章</div>
+          </div>
+          <div class="module-chapters">
+            <span class="chapter-tag">Prompt Engineering</span>
+            <span class="chapter-tag">Context Engineering</span>
+            <span class="chapter-tag">LLM 基础</span>
+            <span class="chapter-tag">Harness Engineering</span>
+          </div>
+        </div>
+
+        <!-- Module 3: Research -->
+        <div class="module m3">
+          <div class="module-header">
+            <div class="module-icon">🔍</div>
+            <div class="module-title">
+              <h3>用 AI 做研究 <span class="en">Research</span></h3>
+            </div>
+            <div class="chapter-count">2 章</div>
+          </div>
+          <div class="module-chapters">
+            <span class="chapter-tag">研究方法</span>
+            <span class="chapter-tag">数据收集与处理</span>
+          </div>
+        </div>
+
+        <!-- Module 4: Learning -->
+        <div class="module m4">
+          <div class="module-header">
+            <div class="module-icon">📚</div>
+            <div class="module-title">
+              <h3>AI 加速学习 <span class="en">Learning</span></h3>
+            </div>
+            <div class="chapter-count">1 章</div>
+          </div>
+          <div class="module-chapters">
+            <span class="chapter-tag">AI 驱动的学习方法</span>
+          </div>
+        </div>
+
+        <!-- Module 5: Writing -->
+        <div class="module m5">
+          <div class="module-header">
+            <div class="module-icon">✍️</div>
+            <div class="module-title">
+              <h3>内容创作与获客 <span class="en">Writing</span></h3>
+            </div>
+            <div class="chapter-count">3 章</div>
+          </div>
+          <div class="module-chapters">
+            <span class="chapter-tag">AI 写作基础</span>
+            <span class="chapter-tag">社交媒体运营</span>
+            <span class="chapter-tag">个人 IP 打造</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="bottom">
+        <div class="logo-dark"><span class="dot"></span> AI 编程实战课</div>
+        <div class="bottom-desc">5 大模块 · 15 章 · 覆盖开发到获客全链路</div>
+      </div>
+    </div>
+  </div>
+  <script>
+    async function exportPoster(btn) {
+      btn.classList.add('loading');
+      btn.textContent = '导出中...';
+      try {
+        const poster = document.getElementById('poster');
+        const canvas = await html2canvas(poster, {
+          scale: 2,
+          useCORS: true,
+          backgroundColor: null,
+        });
+        const link = document.createElement('a');
+        link.download = 'AI编程实战课-课程目录.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      } catch (e) {
+        alert('导出失败: ' + e.message);
+      }
+      btn.classList.remove('loading');
+      btn.innerHTML = '⬇ 导出图片';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#002fa7">
+  <title>AI First 开发流程</title>
+  <style>
+    :root {
+      --blue: #002fa7;
+      --ink: #101010;
+      --paper: #f7f7f3;
+      --white: #ffffff;
+      --gray-100: #ededE8;
+      --gray-300: #c7c7c0;
+      --gray-500: #777772;
+      --gray-700: #3a3a37;
+      --slide-w: 1600;
+      --slide-h: 900;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      overflow: hidden;
+      background: #111;
+      color: var(--ink);
+      font-family: "Helvetica Neue", Arial, "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .viewport {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: 1600px;
+      height: 900px;
+      transform-origin: center center;
+      background: var(--paper);
+      overflow: hidden;
+    }
+
+    .deck,
+    .slide {
+      position: absolute;
+      inset: 0;
+      width: 1600px;
+      height: 900px;
+    }
+
+    .slide {
+      display: none;
+      padding: 72px 84px 64px;
+      background: var(--paper);
+    }
+
+    .slide.active {
+      display: block;
+    }
+
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      column-gap: 24px;
+      height: 100%;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 26px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 42px;
+      height: 4px;
+      background: var(--blue);
+    }
+
+    h1,
+    h2,
+    h3,
+    p {
+      margin-top: 0;
+    }
+
+    h1,
+    .display {
+      font-size: 116px;
+      font-weight: 300;
+      line-height: 0.96;
+      letter-spacing: -0.055em;
+    }
+
+    h2 {
+      margin-bottom: 22px;
+      font-size: 66px;
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.045em;
+    }
+
+    h3 {
+      margin-bottom: 16px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .lead {
+      font-size: 31px;
+      line-height: 1.45;
+      color: var(--gray-700);
+    }
+
+    .body {
+      font-size: 24px;
+      line-height: 1.5;
+      color: var(--gray-700);
+    }
+
+    .small {
+      font-size: 18px;
+      line-height: 1.45;
+      color: var(--gray-500);
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      letter-spacing: 0.02em;
+    }
+
+    .blue {
+      color: var(--blue);
+    }
+
+    .white {
+      color: var(--white);
+    }
+
+    .rule {
+      height: 1px;
+      background: var(--gray-300);
+    }
+
+    .blue-rule {
+      height: 5px;
+      background: var(--blue);
+    }
+
+    .slide-no {
+      position: absolute;
+      right: 84px;
+      top: 72px;
+      color: var(--gray-500);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+    }
+
+    .section-label {
+      position: absolute;
+      left: 84px;
+      bottom: 28px;
+      color: var(--gray-500);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav {
+      position: fixed;
+      z-index: 50;
+      right: 20px;
+      bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: rgba(255, 255, 255, 0.82);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      user-select: none;
+    }
+
+    .progress-track {
+      width: 120px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.25);
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: white;
+      transition: width 180ms ease;
+    }
+
+    .cover {
+      padding: 0;
+      background: var(--white);
+    }
+
+    .cover-left {
+      grid-column: 1 / span 7;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 74px 78px 66px 84px;
+      background: var(--blue);
+    }
+
+    .cover-right {
+      grid-column: 8 / span 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 74px 84px 66px 58px;
+      background: var(--white);
+    }
+
+    .cover h1 {
+      margin: 0;
+      color: var(--white);
+      font-size: 122px;
+    }
+
+    .cover .edition {
+      color: rgba(255, 255, 255, 0.72);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .cover-index {
+      display: grid;
+      grid-template-columns: 60px 1fr;
+      gap: 12px 18px;
+      align-items: baseline;
+      margin-top: auto;
+    }
+
+    .cover-index .num {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+    }
+
+    .cover-index .text {
+      padding-bottom: 13px;
+      border-bottom: 1px solid var(--gray-300);
+      font-size: 22px;
+    }
+
+    .problem-statement {
+      grid-column: 1 / span 8;
+      align-self: center;
+    }
+
+    .problem-statement .display {
+      margin: 0;
+      font-size: 124px;
+    }
+
+    .problem-list {
+      grid-column: 10 / span 3;
+      align-self: end;
+      margin-bottom: 94px;
+    }
+
+    .problem-item {
+      padding: 20px 0;
+      border-top: 1px solid var(--gray-300);
+      font-size: 22px;
+      line-height: 1.35;
+    }
+
+    .statement-band {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 58%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 84px;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .statement-side {
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 42%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 44px;
+      padding: 88px 84px 72px 62px;
+      background: var(--white);
+    }
+
+    .statement-side .side-block {
+      padding-top: 18px;
+      border-top: 4px solid var(--blue);
+    }
+
+    .statement-side .side-title {
+      margin-bottom: 10px;
+      color: var(--blue);
+      font-size: 26px;
+      font-weight: 700;
+    }
+
+    .statement-side p {
+      margin-bottom: 0;
+      font-size: 23px;
+      line-height: 1.42;
+    }
+
+    .timeline {
+      position: relative;
+      grid-column: 1 / -1;
+      align-self: center;
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 0;
+      margin-top: 74px;
+      padding-top: 40px;
+      border-top: 5px solid var(--ink);
+    }
+
+    .timeline-step {
+      position: relative;
+      min-height: 310px;
+      padding: 22px 20px 0 0;
+      border-right: 1px solid var(--gray-300);
+    }
+
+    .timeline-step:last-child {
+      border-right: 0;
+    }
+
+    .timeline-step::before {
+      content: "";
+      position: absolute;
+      top: -52px;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      background: var(--blue);
+    }
+
+    .timeline-step .n {
+      margin-bottom: 36px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .timeline-step h3 {
+      font-size: 27px;
+    }
+
+    .timeline-step p {
+      font-size: 17px;
+      line-height: 1.45;
+      color: var(--gray-500);
+    }
+
+    .question-stack {
+      grid-column: 1 / span 8;
+      align-self: center;
+    }
+
+    .question {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      align-items: start;
+      padding: 24px 0 22px;
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .question:last-child {
+      border-bottom: 1px solid var(--gray-300);
+    }
+
+    .question .n {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 22px;
+    }
+
+    .question .q {
+      font-size: 38px;
+      line-height: 1.2;
+    }
+
+    .deliverable-box {
+      grid-column: 10 / span 3;
+      align-self: center;
+      padding-top: 20px;
+      border-top: 5px solid var(--blue);
+    }
+
+    .deliverable-box h3 {
+      color: var(--blue);
+    }
+
+    .deliverable-box ul {
+      margin: 24px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .deliverable-box li {
+      padding: 12px 0;
+      border-bottom: 1px solid var(--gray-300);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .ui-rail {
+      grid-column: 1 / -1;
+      align-self: end;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-bottom: 72px;
+      border-top: 5px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+    }
+
+    .ui-stage {
+      position: relative;
+      min-height: 300px;
+      padding: 28px 24px 24px 0;
+      border-right: 1px solid var(--gray-300);
+    }
+
+    .ui-stage:last-child {
+      border-right: 0;
+    }
+
+    .ui-stage .n {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 18px;
+    }
+
+    .ui-stage h3 {
+      margin-top: 56px;
+      font-size: 31px;
+    }
+
+    .ui-stage p {
+      max-width: 210px;
+      font-size: 18px;
+      line-height: 1.45;
+      color: var(--gray-500);
+    }
+
+    .system-stack {
+      grid-column: 1 / span 7;
+      align-self: center;
+      display: grid;
+      gap: 10px;
+    }
+
+    .system-layer {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      align-items: center;
+      min-height: 94px;
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .system-layer:last-child {
+      border-bottom: 1px solid var(--gray-300);
+    }
+
+    .system-layer .tag {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .system-layer .items {
+      font-size: 25px;
+      line-height: 1.35;
+    }
+
+    .system-note {
+      grid-column: 9 / span 4;
+      align-self: center;
+      padding: 36px 32px;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .system-note .big {
+      margin-bottom: 100px;
+      font-size: 54px;
+      font-weight: 300;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+    }
+
+    .system-note p {
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 20px;
+      line-height: 1.45;
+    }
+
+    .compare {
+      grid-column: 1 / -1;
+      align-self: end;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: 56px;
+      margin-bottom: 66px;
+    }
+
+    .compare-divider {
+      background: var(--ink);
+    }
+
+    .compare-side {
+      min-height: 420px;
+    }
+
+    .compare-side .label {
+      margin-bottom: 70px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .compare-side .quote {
+      max-width: 550px;
+      margin-bottom: 44px;
+      font-size: 44px;
+      font-weight: 300;
+      line-height: 1.18;
+      letter-spacing: -0.025em;
+    }
+
+    .compare-side .details {
+      padding-top: 16px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 19px;
+      line-height: 1.48;
+      color: var(--gray-500);
+    }
+
+    .loop-wrap {
+      grid-column: 1 / span 8;
+      position: relative;
+      align-self: center;
+      height: 570px;
+    }
+
+    .loop-ring {
+      position: absolute;
+      left: 174px;
+      top: 56px;
+      width: 440px;
+      height: 440px;
+      border: 4px solid var(--blue);
+      border-radius: 50%;
+    }
+
+    .loop-ring::before {
+      content: "一次只做\A 一个结果";
+      white-space: pre;
+      position: absolute;
+      inset: 78px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--gray-300);
+      border-radius: 50%;
+      color: var(--ink);
+      text-align: center;
+      font-size: 35px;
+      font-weight: 300;
+      line-height: 1.22;
+    }
+
+    .loop-node {
+      position: absolute;
+      width: 184px;
+      min-height: 86px;
+      padding: 14px 16px;
+      border-left: 5px solid var(--blue);
+      background: var(--paper);
+    }
+
+    .loop-node .n {
+      margin-bottom: 7px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .loop-node .t {
+      font-size: 21px;
+      line-height: 1.2;
+    }
+
+    .node-1 { left: 8px; top: 72px; }
+    .node-2 { right: 4px; top: 74px; }
+    .node-3 { right: -40px; top: 272px; }
+    .node-4 { right: 42px; bottom: 2px; }
+    .node-5 { left: 38px; bottom: 6px; }
+    .node-6 { left: -36px; top: 272px; }
+
+    .loop-notes {
+      grid-column: 10 / span 3;
+      align-self: center;
+    }
+
+    .loop-notes .metric {
+      padding: 24px 0;
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .loop-notes .metric:last-child {
+      border-bottom: 1px solid var(--gray-300);
+    }
+
+    .loop-notes .metric strong {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--blue);
+      font-size: 23px;
+    }
+
+    .loop-notes .metric span {
+      font-size: 18px;
+      line-height: 1.4;
+      color: var(--gray-500);
+    }
+
+    .test-tower {
+      grid-column: 1 / span 7;
+      align-self: end;
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 8px;
+      margin-bottom: 62px;
+    }
+
+    .test-layer {
+      display: grid;
+      grid-template-columns: 68px 230px 1fr;
+      align-items: center;
+      min-height: 92px;
+      padding: 12px 22px;
+      color: var(--white);
+      background: var(--blue);
+    }
+
+    .test-layer:nth-child(1) { width: 100%; }
+    .test-layer:nth-child(2) { width: 88%; }
+    .test-layer:nth-child(3) { width: 76%; }
+    .test-layer:nth-child(4) { width: 64%; }
+
+    .test-layer .n {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+      opacity: 0.7;
+    }
+
+    .test-layer strong {
+      font-size: 24px;
+    }
+
+    .test-layer span {
+      font-size: 17px;
+      line-height: 1.35;
+      opacity: 0.78;
+    }
+
+    .test-principle {
+      grid-column: 9 / span 4;
+      align-self: center;
+    }
+
+    .test-principle .display {
+      margin-bottom: 40px;
+      color: var(--blue);
+      font-size: 72px;
+      line-height: 1.02;
+    }
+
+    .test-principle p {
+      padding-top: 20px;
+      border-top: 1px solid var(--gray-300);
+      font-size: 22px;
+      line-height: 1.48;
+      color: var(--gray-700);
+    }
+
+    .role-side {
+      align-self: stretch;
+      padding-top: 38px;
+      border-top: 6px solid var(--blue);
+    }
+
+    .role-side .role-title {
+      margin-bottom: 48px;
+      font-size: 53px;
+      font-weight: 300;
+      letter-spacing: -0.035em;
+    }
+
+    .role-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .role-list li {
+      display: grid;
+      grid-template-columns: 44px 1fr;
+      gap: 18px;
+      padding: 18px 0;
+      border-top: 1px solid var(--gray-300);
+      font-size: 23px;
+      line-height: 1.35;
+    }
+
+    .role-list .n {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 16px;
+    }
+
+    .case-title {
+      grid-column: 1 / span 4;
+      align-self: center;
+    }
+
+    .case-title .case-name {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 19px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+    }
+
+    .case-title .bad-task {
+      margin-top: 48px;
+      padding: 26px 0;
+      border-top: 5px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      font-size: 40px;
+      font-weight: 300;
+      line-height: 1.2;
+    }
+
+    .milestones {
+      grid-column: 6 / -1;
+      align-self: center;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 5px solid var(--blue);
+    }
+
+    .milestone {
+      min-height: 160px;
+      padding: 22px 24px 20px 0;
+      border-right: 1px solid var(--gray-300);
+      border-bottom: 1px solid var(--gray-300);
+    }
+
+    .milestone:nth-child(even) {
+      padding-left: 28px;
+      border-right: 0;
+    }
+
+    .milestone .n {
+      margin-bottom: 18px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .milestone h3 {
+      margin-bottom: 8px;
+      font-size: 25px;
+    }
+
+    .milestone p {
+      margin-bottom: 0;
+      color: var(--gray-500);
+      font-size: 16px;
+      line-height: 1.35;
+    }
+
+    .recovery-line {
+      grid-column: 1 / -1;
+      align-self: center;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      margin-top: 64px;
+      border-top: 5px solid var(--ink);
+    }
+
+    .recovery-step {
+      position: relative;
+      min-height: 310px;
+      padding: 30px 26px 20px 0;
+      border-right: 1px solid var(--gray-300);
+    }
+
+    .recovery-step:last-child {
+      border-right: 0;
+    }
+
+    .recovery-step::before {
+      content: "";
+      position: absolute;
+      top: -5px;
+      left: 0;
+      width: 58px;
+      height: 5px;
+      background: var(--blue);
+    }
+
+    .recovery-step .n {
+      margin-bottom: 72px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .recovery-step h3 {
+      font-size: 27px;
+    }
+
+    .recovery-step p {
+      color: var(--gray-500);
+      font-size: 17px;
+      line-height: 1.42;
+    }
+
+    .done-grid {
+      grid-column: 1 / -1;
+      align-self: end;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-bottom: 64px;
+      border-top: 5px solid var(--ink);
+    }
+
+    .done-column {
+      min-height: 440px;
+      padding: 28px 26px 20px 0;
+      border-right: 1px solid var(--gray-300);
+    }
+
+    .done-column:last-child {
+      border-right: 0;
+    }
+
+    .done-column .n {
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .done-column h3 {
+      margin: 58px 0 24px;
+      font-size: 31px;
+    }
+
+    .check {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--gray-300);
+      color: var(--gray-700);
+      font-size: 18px;
+      line-height: 1.35;
+    }
+
+    .check::before {
+      content: "□";
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+
+    .closing {
+      padding: 0;
+      background: var(--white);
+    }
+
+    .closing-left {
+      grid-column: 1 / span 7;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 74px 78px 66px 84px;
+      background: var(--blue);
+      color: var(--white);
+    }
+
+    .closing-left .manifesto {
+      margin: auto 0;
+      font-size: 68px;
+      font-weight: 300;
+      line-height: 1.06;
+      letter-spacing: -0.045em;
+    }
+
+    .closing-right {
+      grid-column: 8 / span 5;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 52px;
+      padding: 74px 84px 66px 58px;
+    }
+
+    .closing-point {
+      padding-top: 20px;
+      border-top: 4px solid var(--blue);
+    }
+
+    .closing-point .n {
+      margin-bottom: 16px;
+      color: var(--blue);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .closing-point p {
+      margin-bottom: 0;
+      font-size: 27px;
+      line-height: 1.35;
+    }
+
+    .help {
+      position: fixed;
+      z-index: 60;
+      left: 20px;
+      bottom: 18px;
+      color: rgba(255, 255, 255, 0.6);
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      user-select: none;
+    }
+
+    @media (max-width: 700px) {
+      .help {
+        display: none;
+      }
+    }
+
+    @media print {
+      @page {
+        size: 16in 9in;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: auto;
+        height: auto;
+        overflow: visible;
+        background: white;
+      }
+
+      .viewport {
+        position: static;
+        width: 1600px;
+        height: auto;
+        transform: none !important;
+        overflow: visible;
+      }
+
+      .deck {
+        position: static;
+        height: auto;
+      }
+
+      .slide,
+      .slide.active {
+        position: relative;
+        display: block;
+        break-after: page;
+        page-break-after: always;
+      }
+
+      .nav,
+      .help {
+        display: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .progress-fill {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="viewport" id="viewport">
+    <div class="deck" id="deck">
+      <section class="slide cover active" data-title="封面" aria-hidden="false">
+        <div class="grid-12">
+          <div class="cover-left">
+            <div class="edition">AI Coding Course / Workflow 01</div>
+            <h1>AI First<br>开发流程</h1>
+            <div class="small white">从模糊想法，到可验证、可发布、可迭代的产品</div>
+          </div>
+          <div class="cover-right">
+            <div class="eyebrow">COURSE DECK</div>
+            <div class="cover-index">
+              <div class="num">01</div><div class="text">定义需求与产品边界</div>
+              <div class="num">02</div><div class="text">设计体验与设计系统</div>
+              <div class="num">03</div><div class="text">计划、开发与持续测试</div>
+              <div class="num">04</div><div class="text">发布、反馈与下一轮迭代</div>
+            </div>
+            <div class="small mono">← → / SPACE 翻页 · F 全屏</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="问题" aria-hidden="true">
+        <div class="slide-no">02 / 15</div>
+        <div class="grid-12">
+          <div class="problem-statement">
+            <div class="eyebrow">THE GAP</div>
+            <p class="display">生成一个页面<br><span class="blue">≠</span> 做出一个产品</p>
+          </div>
+          <div class="problem-list">
+            <div class="problem-item"><span class="blue mono">01</span><br>需求靠 AI 猜</div>
+            <div class="problem-item"><span class="blue mono">02</span><br>一次修改太多</div>
+            <div class="problem-item"><span class="blue mono">03</span><br>只验证成功情况</div>
+            <div class="problem-item"><span class="blue mono">04</span><br>代码完成即宣布上线</div>
+          </div>
+        </div>
+        <div class="section-label">Problem / Why a workflow matters</div>
+      </section>
+
+      <section class="slide" data-title="核心判断" aria-hidden="true">
+        <div class="statement-band">
+          <div class="eyebrow white">CORE PRINCIPLE</div>
+          <p class="display" style="font-size: 82px; margin: 0;">AI 承担执行<br>人承担判断</p>
+          <p style="margin: 44px 0 0; max-width: 650px; color: rgba(255,255,255,.74); font-size: 24px; line-height: 1.5;">AI 可以写代码、改文件、运行测试、排错和管理版本，但不能替你决定什么问题值得解决。</p>
+        </div>
+        <div class="statement-side">
+          <div class="side-block">
+            <div class="side-title">不是全自动</div>
+            <p>产品负责人仍要定义目标、提供上下文、确认边界。</p>
+          </div>
+          <div class="side-block">
+            <div class="side-title">不是只看代码</div>
+            <p>最终验收对象是用户体验、业务规则、安全和真实结果。</p>
+          </div>
+          <div class="side-block">
+            <div class="side-title">不是一次生成</div>
+            <p>稳定产出来自计划、小步执行、持续测试和反馈循环。</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-title="全流程地图" aria-hidden="true">
+        <div class="slide-no">04 / 15</div>
+        <div class="eyebrow">THE PRODUCT LOOP</div>
+        <h2>从想法到产品，是一条<span class="blue">可验证的链路</span></h2>
+        <div class="grid-12" style="height: 610px;">
+          <div class="timeline">
+            <div class="timeline-step"><div class="n">01</div><h3>定义需求</h3><p>用户、问题、核心任务与 MVP 边界</p></div>
+            <div class="timeline-step"><div class="n">02</div><h3>设计 UI</h3><p>用户流程、页面与所有关键状态</p></div>
+            <div class="timeline-step"><div class="n">03</div><h3>设计系统</h3><p>视觉变量、组件和交互规则</p></div>
+            <div class="timeline-step"><div class="n">04</div><h3>制定计划</h3><p>任务依赖、风险、验证与人工操作</p></div>
+            <div class="timeline-step"><div class="n">05</div><h3>小步开发</h3><p>一次完成一个可观察结果</p></div>
+            <div class="timeline-step"><div class="n">06</div><h3>持续测试</h3><p>自动检查与人工体验同步进行</p></div>
+            <div class="timeline-step"><div class="n">07</div><h3>发布</h3><p>生产配置、监控与公开访问</p></div>
+            <div class="timeline-step"><div class="n">08</div><h3>反馈迭代</h3><p>用真实行为决定下一步</p></div>
+          </div>
+        </div>
+        <div class="section-label">Framework / Eight connected stages</div>
+      </section>
+
+      <section class="slide" data-title="定义需求" aria-hidden="true">
+        <div class="slide-no">05 / 15</div>
+        <div class="eyebrow">01 / DEFINE</div>
+        <h2>先回答三个问题，<span class="blue">再让 AI 写需求</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="question-stack">
+            <div class="question"><div class="n">Q1</div><div class="q">谁会使用这个产品？</div></div>
+            <div class="question"><div class="n">Q2</div><div class="q">用户最想完成的一件事是什么？</div></div>
+            <div class="question"><div class="n">Q3</div><div class="q">第一版明确不做什么？</div></div>
+          </div>
+          <div class="deliverable-box">
+            <h3>本阶段产出</h3>
+            <ul>
+              <li>一句话产品定位</li>
+              <li>一个目标用户</li>
+              <li>一条核心路径</li>
+              <li>必做 / 可选 / 不做</li>
+              <li>可勾选验收标准</li>
+            </ul>
+          </div>
+        </div>
+        <div class="section-label">Deliverable / One-page MVP brief</div>
+      </section>
+
+      <section class="slide" data-title="设计 UI" aria-hidden="true">
+        <div class="slide-no">06 / 15</div>
+        <div class="eyebrow">02 / DESIGN UI</div>
+        <h2><span class="blue">先流程，后画面</span>；先状态，后装饰</h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="ui-rail">
+            <div class="ui-stage"><div class="n">01</div><h3>用户流程</h3><p>从进入产品到完成核心任务</p></div>
+            <div class="ui-stage"><div class="n">02</div><h3>页面目的</h3><p>每一页只承担清楚的职责</p></div>
+            <div class="ui-stage"><div class="n">03</div><h3>低保真</h3><p>先确认信息与操作层级</p></div>
+            <div class="ui-stage"><div class="n">04</div><h3>高保真</h3><p>再确定视觉与品牌表达</p></div>
+            <div class="ui-stage"><div class="n">05</div><h3>完整状态</h3><p>加载、空、失败、禁用、移动端</p></div>
+          </div>
+        </div>
+        <div class="section-label">Rule / UI is the path to a result</div>
+      </section>
+
+      <section class="slide" data-title="设计系统" aria-hidden="true">
+        <div class="slide-no">07 / 15</div>
+        <div class="eyebrow">03 / DESIGN SYSTEM</div>
+        <h2>让 AI 复用规则，<span class="blue">不要逐页随机发挥</span></h2>
+        <div class="grid-12" style="height: 625px;">
+          <div class="system-stack">
+            <div class="system-layer"><div class="tag">TOKENS</div><div class="items">颜色 · 字体 · 间距 · 边框 · 图标</div></div>
+            <div class="system-layer"><div class="tag">COMPONENTS</div><div class="items">按钮 · 输入框 · 卡片 · 弹窗 · 导航</div></div>
+            <div class="system-layer"><div class="tag">STATES</div><div class="items">正常 · 悬停 · 禁用 · 加载 · 错误</div></div>
+            <div class="system-layer"><div class="tag">RULES</div><div class="items">响应式 · 无障碍 · 页面复用 · 内容密度</div></div>
+          </div>
+          <div class="system-note">
+            <div class="big">一致性<br>就是效率</div>
+            <p>设计系统减少重复决策，也给 AI 一套明确、可检查的生成约束。</p>
+          </div>
+        </div>
+        <div class="section-label">System / Reusable visual and interaction rules</div>
+      </section>
+
+      <section class="slide" data-title="制定计划" aria-hidden="true">
+        <div class="slide-no">08 / 15</div>
+        <div class="eyebrow">04 / PLAN</div>
+        <h2>任务要小到<span class="blue">可以独立验收</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="compare">
+            <div class="compare-side">
+              <div class="label">VAGUE / 模糊任务</div>
+              <div class="quote">“帮我完成<br>整个博客。”</div>
+              <div class="details">范围不可控 · 问题难定位 · 无法知道做到哪里 · 返工成本高</div>
+            </div>
+            <div class="compare-divider"></div>
+            <div class="compare-side">
+              <div class="label">TESTABLE / 可验证任务</div>
+              <div class="quote">“读取已发布文章，<br>显示列表与空状态。”</div>
+              <div class="details">有输入 · 有输出 · 有边界 · 有测试 · 完成后能立即验收并保存版本</div>
+            </div>
+          </div>
+        </div>
+        <div class="section-label">Plan anatomy / Scope + dependency + result + test</div>
+      </section>
+
+      <section class="slide" data-title="小步开发" aria-hidden="true">
+        <div class="slide-no">09 / 15</div>
+        <div class="eyebrow">05 / BUILD</div>
+        <h2>稳定开发来自一个<span class="blue">短循环</span></h2>
+        <div class="grid-12" style="height: 630px;">
+          <div class="loop-wrap">
+            <div class="loop-ring"></div>
+            <div class="loop-node node-1"><div class="n">01</div><div class="t">读取上下文</div></div>
+            <div class="loop-node node-2"><div class="n">02</div><div class="t">说明改动范围</div></div>
+            <div class="loop-node node-3"><div class="n">03</div><div class="t">实现单个任务</div></div>
+            <div class="loop-node node-4"><div class="n">04</div><div class="t">AI 运行检查</div></div>
+            <div class="loop-node node-5"><div class="n">05</div><div class="t">人工体验验收</div></div>
+            <div class="loop-node node-6"><div class="n">06</div><div class="t">保存可恢复版本</div></div>
+          </div>
+          <div class="loop-notes">
+            <div class="metric"><strong>可观察</strong><span>每一步都能看到结果</span></div>
+            <div class="metric"><strong>可定位</strong><span>失败知道来自哪次修改</span></div>
+            <div class="metric"><strong>可恢复</strong><span>随时回到最近可用版本</span></div>
+          </div>
+        </div>
+        <div class="section-label">Build loop / Read → Change → Check → Accept → Save</div>
+      </section>
+
+      <section class="slide" data-title="持续测试" aria-hidden="true">
+        <div class="slide-no">10 / 15</div>
+        <div class="eyebrow">06 / TEST</div>
+        <h2>测试不是终点，<span class="blue">而是开发节奏</span></h2>
+        <div class="grid-12" style="height: 630px;">
+          <div class="test-tower">
+            <div class="test-layer"><div class="n">01</div><strong>静态检查</strong><span>语法 · 类型 · 格式 · 构建</span></div>
+            <div class="test-layer"><div class="n">02</div><strong>单元测试</strong><span>计算 · 状态转换 · 数据处理</span></div>
+            <div class="test-layer"><div class="n">03</div><strong>流程测试</strong><span>注册 · 发布 · 支付 · 关键路径</span></div>
+            <div class="test-layer"><div class="n">04</div><strong>人工验收</strong><span>文案 · 视觉 · 体验 · 真实设备</span></div>
+          </div>
+          <div class="test-principle">
+            <div class="display">保护<br>关键业务</div>
+            <p>不追求漂亮的覆盖率数字。优先保护用户数据、权限、金额、权益和核心任务。</p>
+          </div>
+        </div>
+        <div class="section-label">Quality / Automation plus human judgment</div>
+      </section>
+
+      <section class="slide" data-title="职责分工" aria-hidden="true">
+        <div class="slide-no">11 / 15</div>
+        <div class="eyebrow">COLLABORATION</div>
+        <h2>把执行交给 AI，<span class="blue">把责任留在人手里</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="role-side" style="grid-column: 1 / span 5;">
+            <div class="role-title">AI 负责执行</div>
+            <ul class="role-list">
+              <li><span class="n">01</span><span>阅读项目与整理上下文</span></li>
+              <li><span class="n">02</span><span>编写、修改和解释代码</span></li>
+              <li><span class="n">03</span><span>运行测试、分析日志、辅助排错</span></li>
+              <li><span class="n">04</span><span>检查改动与管理版本</span></li>
+            </ul>
+          </div>
+          <div class="role-side" style="grid-column: 8 / span 5;">
+            <div class="role-title blue">人负责判断</div>
+            <ul class="role-list">
+              <li><span class="n">01</span><span>决定用户、问题和产品边界</span></li>
+              <li><span class="n">02</span><span>提供密钥、账号与敏感授权</span></li>
+              <li><span class="n">03</span><span>验收体验、安全和业务结果</span></li>
+              <li><span class="n">04</span><span>决定发布、回滚与下一次迭代</span></li>
+            </ul>
+          </div>
+        </div>
+        <div class="section-label">Responsibility / AI executes, humans remain accountable</div>
+      </section>
+
+      <section class="slide" data-title="博客案例" aria-hidden="true">
+        <div class="slide-no">12 / 15</div>
+        <div class="eyebrow">EXAMPLE / BLOG SYSTEM</div>
+        <h2>把“大任务”变成<span class="blue">六个里程碑</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="case-title">
+            <div class="case-name">BEFORE</div>
+            <div class="bad-task">“帮我做一个<br>完整博客。”</div>
+            <p class="small" style="margin-top: 22px;">看似省事，实际没有完成标准，也无法定位风险。</p>
+          </div>
+          <div class="milestones">
+            <div class="milestone"><div class="n">01</div><h3>产品外壳</h3><p>首页、详情、编辑页使用假数据可操作</p></div>
+            <div class="milestone"><div class="n">02</div><h3>数据库</h3><p>文章表、示例数据和安全访问规则</p></div>
+            <div class="milestone"><div class="n">03</div><h3>公开读取</h3><p>只显示已发布文章与合理空状态</p></div>
+            <div class="milestone"><div class="n">04</div><h3>内容管理</h3><p>创建、预览、编辑、发布和删除</p></div>
+            <div class="milestone"><div class="n">05</div><h3>分享与 SEO</h3><p>稳定链接、元数据、OG 图和站点地图</p></div>
+            <div class="milestone"><div class="n">06</div><h3>测试与上线</h3><p>权限、异常、移动端与生产环境验收</p></div>
+          </div>
+        </div>
+        <div class="section-label">Applied framework / One milestone, one accepted result</div>
+      </section>
+
+      <section class="slide" data-title="出错恢复" aria-hidden="true">
+        <div class="slide-no">13 / 15</div>
+        <div class="eyebrow">DEBUG & RECOVER</div>
+        <h2>出错时，不要让 AI <span class="blue">连续猜修复</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="recovery-line">
+            <div class="recovery-step"><div class="n">01</div><h3>稳定复现</h3><p>记录操作、输入、环境和完整错误。</p></div>
+            <div class="recovery-step"><div class="n">02</div><h3>收集证据</h3><p>检查日志、网络请求、数据库与改动。</p></div>
+            <div class="recovery-step"><div class="n">03</div><h3>定位根因</h3><p>让 AI 解释证据，而不是同时尝试多个猜测。</p></div>
+            <div class="recovery-step"><div class="n">04</div><h3>最小修复</h3><p>只修改与根因直接相关的代码。</p></div>
+            <div class="recovery-step"><div class="n">05</div><h3>验证与保存</h3><p>重跑关键路径，确认无回归再保存版本。</p></div>
+          </div>
+        </div>
+        <div class="section-label">Recovery / Evidence before edits</div>
+      </section>
+
+      <section class="slide" data-title="完成标准" aria-hidden="true">
+        <div class="slide-no">14 / 15</div>
+        <div class="eyebrow">DEFINITION OF DONE</div>
+        <h2>代码完成，不等于<span class="blue">产品完成</span></h2>
+        <div class="grid-12" style="height: 620px;">
+          <div class="done-grid">
+            <div class="done-column"><div class="n">01</div><h3>产品</h3><div class="check">核心任务可以完成</div><div class="check">状态与文案完整</div><div class="check">移动端可使用</div></div>
+            <div class="done-column"><div class="n">02</div><h3>工程</h3><div class="check">构建与关键测试通过</div><div class="check">错误可定位</div><div class="check">版本可以恢复</div></div>
+            <div class="done-column"><div class="n">03</div><h3>安全</h3><div class="check">密钥没有泄漏</div><div class="check">权限由后端验证</div><div class="check">用户数据相互隔离</div></div>
+            <div class="done-column"><div class="n">04</div><h3>发布</h3><div class="check">生产配置已确认</div><div class="check">监控与反馈入口存在</div><div class="check">真人完成一次任务</div></div>
+          </div>
+        </div>
+        <div class="section-label">Acceptance / Product + Engineering + Security + Delivery</div>
+      </section>
+
+      <section class="slide closing" data-title="结尾" aria-hidden="true">
+        <div class="grid-12">
+          <div class="closing-left">
+            <div class="edition">AI FIRST / CLOSING MANIFESTO</div>
+            <div class="manifesto">先说清问题，<br>再设计体验；<br>先制定计划，<br>再小步实现。</div>
+            <div class="small white">每一步都验证，最终用真实用户判断产品是否成立。</div>
+          </div>
+          <div class="closing-right">
+            <div class="closing-point"><div class="n">TAKEAWAY 01</div><p>AI 是执行能力的放大器，不是产品判断的替代品。</p></div>
+            <div class="closing-point"><div class="n">TAKEAWAY 02</div><p>任务越可验证，开发越稳定，失败越容易恢复。</p></div>
+            <div class="closing-point"><div class="n">TAKEAWAY 03</div><p>发布不是结束，真实反馈才是下一轮开发的输入。</p></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="help">← → SPACE 翻页 · HOME / END · F 全屏 · P 打印</div>
+  <div class="nav" aria-live="polite">
+    <span id="counter">01 / 15</span>
+    <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+  </div>
+
+  <script>
+    (() => {
+      const viewport = document.getElementById('viewport');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const counter = document.getElementById('counter');
+      const progress = document.getElementById('progress');
+      let current = 0;
+      let touchStartX = null;
+      let wheelLocked = false;
+
+      function fitDeck() {
+        const scale = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+        viewport.style.transform = `translate(-50%, -50%) scale(${scale})`;
+      }
+
+      function show(index, updateHash = true) {
+        current = Math.max(0, Math.min(index, slides.length - 1));
+        slides.forEach((slide, i) => {
+          const active = i === current;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', String(!active));
+        });
+        const currentLabel = String(current + 1).padStart(2, '0');
+        const totalLabel = String(slides.length).padStart(2, '0');
+        counter.textContent = `${currentLabel} / ${totalLabel}`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        document.title = `${slides[current].dataset.title}｜AI First 开发流程`;
+        if (updateHash) history.replaceState(null, '', `#slide-${current + 1}`);
+      }
+
+      function next() { show(current + 1); }
+      function previous() { show(current - 1); }
+
+      window.addEventListener('resize', fitDeck);
+      window.addEventListener('keydown', (event) => {
+        if (['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(event.key)) {
+          event.preventDefault();
+          next();
+        } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(event.key)) {
+          event.preventDefault();
+          previous();
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          show(0);
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          show(slides.length - 1);
+        } else if (event.key.toLowerCase() === 'f') {
+          event.preventDefault();
+          if (!document.fullscreenElement) document.documentElement.requestFullscreen?.();
+          else document.exitFullscreen?.();
+        } else if (event.key.toLowerCase() === 'p') {
+          event.preventDefault();
+          window.print();
+        }
+      });
+
+      window.addEventListener('wheel', (event) => {
+        if (wheelLocked || Math.abs(event.deltaY) < 24) return;
+        wheelLocked = true;
+        event.deltaY > 0 ? next() : previous();
+        window.setTimeout(() => { wheelLocked = false; }, 450);
+      }, { passive: true });
+
+      window.addEventListener('touchstart', (event) => {
+        touchStartX = event.changedTouches[0].clientX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (event) => {
+        if (touchStartX === null) return;
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 48) delta < 0 ? next() : previous();
+        touchStartX = null;
+      }, { passive: true });
+
+      window.addEventListener('click', (event) => {
+        if (event.target.closest('a, button')) return;
+        event.clientX > window.innerWidth / 2 ? next() : previous();
+      });
+
+      const hashMatch = location.hash.match(/slide-(\d+)/);
+      const initial = hashMatch ? Number(hashMatch[1]) - 1 : 0;
+      fitDeck();
+      show(initial, false);
+    })();
+  </script>
+</body>
+</html>
